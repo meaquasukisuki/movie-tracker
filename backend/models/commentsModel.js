@@ -37,6 +37,7 @@
 // module.exports = commentsModel;
 
 const mongoose = require("mongoose");
+const ObjectId = require("mongodb").ObjectID;
 
 const commentsSchema = new mongoose.Schema(
   {
@@ -53,8 +54,7 @@ const commentsSchema = new mongoose.Schema(
       required: true,
     },
     movie_id: {
-      type: String,
-      required: true,
+      type: ObjectId,
     },
     text: {
       type: String,
@@ -66,7 +66,7 @@ const commentsSchema = new mongoose.Schema(
     },
   },
   {
-    collection: "movies",
+    document: "comments",
   }
 );
 

@@ -1,21 +1,27 @@
 // import express from 'express';
 // import Movies from '../models/productModel';
-const express = require('express');
-const Movies = require('../models/movieModel');
+const { db } = require("../app");
+
+const express = require("express");
+const Movies = require("../models/movieModel");
+const Comments = require("../models/commentsModel");
 const router = express.Router();
+const ObjectId = require("mongodb").ObjectID;
 
 //get all movies
 
-router.get('/', async (req, res) => {
-  res.setHeader('Content-Type', 'application/json');
+router.get("/", async (req, res) => {
+  res.setHeader("Content-Type", "application/json");
   //example: https://stackabuse.com/?page=2&limit=50
   //localhost:5000/api/movies/?page=10&limit=5
 
   const page = parseInt(req.query.page);
-  const limit = parseInt(req.query.limit)
+  const limit = parseInt(req.query.limit);
 
   try {
-    const movies = await Movies.find({}).limit(limit).skip((page-1) * limit);
+    const movies = await Movies.find({})
+      .limit(limit)
+      .skip((page - 1) * limit);
     res.send(movies);
   } catch (e) {
     res.status(500).send();
@@ -24,14 +30,58 @@ router.get('/', async (req, res) => {
 
 //get One movie with id
 
-router.get('/:id', (req, res) => {
-  Movies.findOne({ _id: req.params.id }, (err, movie) => {
-    if (err) {
-      res.status(500).send();
-    } else {
-      res.status(200).send(movie);
+router.get("/:id", async (req, res) => {
+  try {
+    const movie = await Movies.findOne({ _id: ObjectId(req.params.id) });
+    const comments = await Comments.find({
+      movie_id: ObjectId(req.params.id),
+    });
+
+    res.status(200).send({
+      movie,
+      comments,
+    });
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+});
+
+router.post("/:id", async (req, res) => {
+  try {
+    const movie = await Movies.findOne({ _id: ObjectId(req.params.id) });
+    if (!movie) {
+      throw new Error("cannot find movie!");
     }
-  });
+    const commentData = {
+      //request body only needs name,email and text.
+      ...req.body,
+      _id: new mongoose.Types.ObjectId(),
+      date: Date.now(),
+      movie_id: req.params.id,
+    };
+    new Comments.save(commentData);
+    if (!movie.num_mflix_comments) {
+      db.collection.update(
+        { _id: ObjectId(req.params.id) },
+        {
+          $set: {
+            num_mflix_comments: 0,
+          },
+        }
+      );
+    } else {
+      db.collection.update(
+        { _id: ObjectId(req.params.id) },
+        {
+          $set: {
+            num_mflix_comments: movie.num_mflix_comments++,
+          },
+        }
+      );
+    }
+  } catch (e) {
+    res.send(e.message);
+  }
 });
 
 // router.put("/:id", isAuth, isAdmin, async (req, res) => {

@@ -29,7 +29,7 @@ export const CardContainer = memo(() => {
   const cardContainer = useSelector(selectCardContainer);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const dispatch = useDispatch();
-  const { loading, page, limit } = cardContainer;
+  const { loading, page, limit, sortMethod } = cardContainer;
 
   useEffect(() => {
     dispatch({
@@ -38,7 +38,47 @@ export const CardContainer = memo(() => {
     return () => {
       console.log('clean up');
     };
-  }, [dispatch]);
+  }, []);
+
+  const onDisplayChangeHandler = e => {
+    dispatch({
+      type: actions.setMoviesCount.type,
+      payload: {
+        limit: e.target.value,
+      },
+    });
+    dispatch({
+      type: actions.fetchMovieStart.type,
+    });
+  };
+
+  const onSortMethodChangeHandler: (any) => void = e => {
+    switch (e.target.value) {
+      case 'runtime':
+        dispatch({
+          type: actions.sortMoviesData.type,
+          payload: 'runtime',
+        });
+        break;
+      case 'rating':
+        dispatch({
+          type: actions.sortMoviesData.type,
+          payload: 'rating',
+        });
+        break;
+
+      case 'release time':
+        dispatch({
+          type: actions.sortMoviesData.type,
+          payload: 'release time',
+        });
+        break;
+
+      default:
+        return;
+    }
+    console.log(e.target.value);
+  };
 
   return (
     <>
@@ -46,6 +86,28 @@ export const CardContainer = memo(() => {
         <title>CardContainer</title>
         <meta name="description" content="Description of CardContainer" />
       </Helmet>
+
+      <Form>
+        <Label>
+          One page display :
+          <Select value={limit} onChange={onDisplayChangeHandler}>
+            <option value={5}>5</option>
+            <option value={10}>10</option>
+            <option value={25}>25</option>
+            <option value={100}>100</option>
+          </Select>
+        </Label>
+        <Label>
+          Sort By:
+          <Select value={sortMethod} onChange={onSortMethodChangeHandler}>
+            <option value="runtime">runtime</option>
+            <option value="rating">rating</option>
+            <option value="comments">comments</option>
+            <option value="release time">release time</option>
+          </Select>
+        </Label>
+      </Form>
+
       <Div>
         {loading ? (
           <div>Loading!!!!!</div>
@@ -95,6 +157,7 @@ const Div = styled.main`
   max-width: 100%;
   justify-content: space-between;
   flex-wrap: wrap;
+  color: white;
   ${media.small`
     display:flex;
     flex-flow:column,wrap;
@@ -120,6 +183,31 @@ const Button = styled.button`
 `;
 
 const PageInfo = styled.div`
+  color: white;
   font-size: 2rem;
   align-self: center;
+`;
+
+const Form = styled.form`
+  color: white;
+  display: flex;
+  justify-content: flex-start;
+  font-size: 2rem;
+
+  @media only screen and (max-width: 500px) {
+    flex-direction: column;
+  }
+`;
+
+const Label = styled.label`
+  @media only screen and (max-width: 500px) {
+    &:nth-last-child(1) {
+      margin-top: 1rem;
+    }
+  }
+`;
+
+const Select = styled.select`
+  margin-left: 1rem;
+  width: 8rem;
 `;

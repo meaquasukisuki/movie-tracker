@@ -25,6 +25,8 @@ export const Header = memo((props: Props) => {
   const header = useSelector(selectHeader);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const dispatch = useDispatch();
+  
+  
 
   return (
     <>

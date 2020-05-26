@@ -10,6 +10,7 @@ export const initialState: ContainerState = {
   limit: 25,
   loading: false,
   error: null,
+  sortMethod: 'rating',
 };
 
 const cardContainerSlice = createSlice({
@@ -32,15 +33,39 @@ const cardContainerSlice = createSlice({
       state.page = state.page + 1;
       state.loading = true;
     },
-
     previousPageStart(state) {
       state.page = state.page - 1;
       state.loading = true;
       console.log(state.page);
     },
-
     setMoviesCount(state, action: PayloadAction<any>) {
       state.limit = action.payload.limit;
+    },
+    sortMoviesData(state, action: PayloadAction<any>) {
+      switch (action.payload) {
+        case 'runtime':
+          state.sortMethod = 'runtime';
+          state.moviesData = state.moviesData.sort((a, b) => {
+            return a.runtime - b.runtime;
+          });
+          break;
+        case 'rating':
+          state.sortMethod = 'rating';
+          state.moviesData = state.moviesData.sort((a, b) => {
+            return a.imdb.rating - b.imdb.rating;
+          });
+          break;
+
+        case 'release time':
+          state.sortMethod = 'release time';
+          state.moviesData = state.moviesData.sort((a, b) => {
+            return Date.parse(b.lastupdated) - Date.parse(a.lastupdated);
+          });
+          break;
+
+        default:
+          return;
+      }
     },
   },
 });

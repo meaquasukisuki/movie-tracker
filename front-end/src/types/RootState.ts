@@ -1,4 +1,6 @@
 import { CardContainerState } from 'app/containers/CardContainer/types';
+import { HeaderState } from 'app/containers/Header/types';
+import { LoadingComponentState } from 'app/containers/LoadingComponent/types';
 // [IMPORT NEW CONTAINERSTATE ABOVE] < Needed for generating containers seamlessly
 
 /* 
@@ -7,5 +9,7 @@ import { CardContainerState } from 'app/containers/CardContainer/types';
 */
 export interface RootState {
   cardContainer?: CardContainerState;
+  header?: HeaderState;
+  loadingComponent?: LoadingComponentState;
   // [INSERT NEW REDUCER KEY ABOVE] < Needed for generating containers seamlessly
 }

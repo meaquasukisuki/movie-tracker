@@ -5,6 +5,7 @@ export interface CardContainerState {
   limit: number;
   loading: boolean;
   error: any;
+  sortMethod: undefined | string;
 }
 
 export type ContainerState = CardContainerState;

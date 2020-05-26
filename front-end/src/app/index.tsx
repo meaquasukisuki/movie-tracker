@@ -14,22 +14,31 @@ import { GlobalStyle } from 'styles/global-styles';
 
 import { HomePage } from './containers/HomePage/Loadable';
 import { NotFoundPage } from './components/NotFoundPage/Loadable';
+import { DetailedPage } from './components/DetailedPage/Loadable';
+import { SignInPage } from './components/SignInPage/Loadable';
+import { SignUpPage } from './components/SignUpPage/Loadable';
+import { Header } from './containers/Header';
 
 export function App() {
   return (
-    <BrowserRouter>
-      <Helmet
-        titleTemplate="%s - React Boilerplate"
-        defaultTitle="React Boilerplate"
-      >
-        <meta name="description" content="A React Boilerplate application" />
-      </Helmet>
-
-      <Switch>
-        <Route exact path="/" component={HomePage} />
-        <Route component={NotFoundPage} />
-      </Switch>
-      <GlobalStyle />
-    </BrowserRouter>
+    <>
+      <BrowserRouter>
+        <Helmet
+          titleTemplate="%s - React Boilerplate"
+          defaultTitle="React Boilerplate"
+        >
+          <meta name="description" content="A React Boilerplate application" />
+        </Helmet>
+        <Header />
+        <Switch>
+          <Route exact path="/" component={HomePage} />
+          <Route path="/movies/:id" component={DetailedPage} />
+          <Route path="/signin" component={SignInPage} />
+          <Route path="/signup" component={SignUpPage} />
+          <Route component={NotFoundPage} />
+        </Switch>
+        <GlobalStyle />
+      </BrowserRouter>
+    </>
   );
 }

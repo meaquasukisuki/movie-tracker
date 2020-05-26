@@ -21,6 +21,10 @@ export function* fetchMovies() {
       type: actions.fetchMovieSuccess.type,
       payload: moviesData,
     });
+    yield put({
+      type: actions.sortMoviesData.type,
+      payload: state.sortMethod,
+    });
   } catch (error) {
     yield put({
       type: actions.fetchMovieFailure.type,
