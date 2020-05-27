@@ -7,7 +7,7 @@ const Movies = require("../models/movieModel");
 const Comments = require("../models/commentsModel");
 const router = express.Router();
 const ObjectId = require("mongodb").ObjectID;
-
+const mongoose = require("mongoose");
 //get all movies
 
 router.get("/", async (req, res) => {
@@ -50,35 +50,19 @@ router.post("/:id", async (req, res) => {
   try {
     const movie = await Movies.findOne({ _id: ObjectId(req.params.id) });
     if (!movie) {
-      throw new Error("cannot find movie!");
+      res.status(201).send("cannot find this movie!");
     }
+
     const commentData = {
       //request body only needs name,email and text.
       ...req.body,
       _id: new mongoose.Types.ObjectId(),
-      date: Date.now(),
+      date: new Date().toString(),
       movie_id: req.params.id,
     };
-    new Comments.save(commentData);
-    if (!movie.num_mflix_comments) {
-      db.collection.update(
-        { _id: ObjectId(req.params.id) },
-        {
-          $set: {
-            num_mflix_comments: 0,
-          },
-        }
-      );
-    } else {
-      db.collection.update(
-        { _id: ObjectId(req.params.id) },
-        {
-          $set: {
-            num_mflix_comments: movie.num_mflix_comments++,
-          },
-        }
-      );
-    }
+    await Comments.create(commentData);
+
+    res.send(commentData);
   } catch (e) {
     res.send(e.message);
   }

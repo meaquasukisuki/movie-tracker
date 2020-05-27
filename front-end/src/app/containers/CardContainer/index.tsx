@@ -15,6 +15,7 @@ import { selectCardContainer } from './selectors';
 import { cardContainerSaga } from './saga';
 import { media } from 'styles/media';
 import { MovieCard } from 'app/components/MovieCard';
+import { LoadingComponent } from '../LoadingComponent';
 
 interface Props {
   page: number;
@@ -30,7 +31,9 @@ export const CardContainer = memo(() => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const dispatch = useDispatch();
   const { loading, page, limit, sortMethod } = cardContainer;
-
+  
+  
+  
   useEffect(() => {
     dispatch({
       type: actions.fetchMovieStart.type,
@@ -110,7 +113,7 @@ export const CardContainer = memo(() => {
 
       <Div>
         {loading ? (
-          <div>Loading!!!!!</div>
+          <LoadingComponent/>
         ) : (
           cardContainer.moviesData.map(movieData => {
             const id = movieData._id;

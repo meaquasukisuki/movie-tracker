@@ -9,13 +9,22 @@ import axiosInstance from 'app/axios/axios.config';
 import { RouteComponentProps } from 'react-router-dom';
 import MovieTypes from './MovieTypes';
 import { LoadingComponent } from 'app/containers/LoadingComponent';
+import { Comment } from '../Comment/Loadable';
 
 interface Props extends RouteComponentProps {}
 
 export const DetailedPage = memo((props: Props) => {
   const [detailedData, setDetailedData] = useState({
     movie: { poster: undefined, title: '', plot: '', genres: [] },
-    comments: [],
+    comments: [
+      {
+        _id: '',
+        name: '',
+        email: '',
+        movie_id: '',
+        text: '',
+      },
+    ],
   });
 
   const [loadingState, setLoadingState] = useState(false);
@@ -35,7 +44,7 @@ export const DetailedPage = memo((props: Props) => {
       console.log('clean up!');
     };
   }, []);
-  console.log(detailedData.movie);
+  console.log(detailedData);
 
   // @ts-ignore
   return loadingState ? (
@@ -43,10 +52,12 @@ export const DetailedPage = memo((props: Props) => {
   ) : (
     <Container>
       <div className="tags">
-        tag: {detailedData.movie.genres.map(genre => {
+        tag:{' '}
+        {detailedData.movie.genres.map(genre => {
           return <span>{genre} </span>;
         })}
       </div>
+
       <div className="image-container">
         <img
           className="image"
@@ -59,8 +70,14 @@ export const DetailedPage = memo((props: Props) => {
         />
       </div>
       <div className="info">
-        <div>{detailedData.movie.title}</div>
-        <div>{detailedData.movie.plot}</div>
+        <div>title: {detailedData.movie.title}</div>
+        <div>description: {detailedData.movie.plot}</div>
+      </div>
+      <div className="comments">
+        <div>comments:</div>
+        {detailedData.comments.map(comment => {
+          return <Comment key={comment._id} {...comment} />;
+        })}
       </div>
     </Container>
   );
@@ -73,14 +90,45 @@ const Container = styled.div`
   .image-container {
     margin-top: 50px;
   }
-  
+  .info {
+    margin-top: 3rem;
+  }
+
+  .comments {
+    margin-top: 3rem;
+  }
+
   @media screen and (max-width: 720px) {
+    font-size: 2rem;
     .image-container {
       width: 100%;
       & > img {
         width: 100%;
         height: 500px;
       }
+    }
+    .tags {
+      margin-left: 4rem;
+      margin-top: 2rem;
+    }
+    .comments {
+      font-size: 1rem;
+    }
+  }
+  @media screen and (min-width: 720px) {
+    font-size: 2rem;
+    .image-container {
+      width: 50%;
+      & > img {
+        width: 100%;
+        height: 500px;
+      }
+    }
+    .info {
+      width: 50%;
+    }
+    .comments {
+      width: 40%;
     }
   }
 `;
