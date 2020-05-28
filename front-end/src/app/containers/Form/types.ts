@@ -1,11 +1,13 @@
 /* --- STATE --- */
 export interface FormState {
-  email: string;
-  password: string;
-  name?: string;
+  userData: {
+    email: string;
+    password: string;
+    name?: string;
+  };
   error: Error | null;
   loading: boolean;
-  formType: string;
+  isSignedIn: boolean;
 }
 
 export type ContainerState = FormState;

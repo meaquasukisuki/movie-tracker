@@ -1,17 +1,56 @@
 import { take, call, put, select, takeLatest } from 'redux-saga/effects';
 import { actions } from './slice';
-import { formSelect } from './index';
 
-const type = formSelect.formType;
+import { selectForm } from './selectors';
+import axiosInstance from 'app/axios/axios.config';
 
-export function* signUpWorkSaga() {}
+function* signInWorkSaga() {
+  const formState = yield select(selectForm);
+  console.log(formState);
 
-export function* signInWorkSaga() {}
+  try {
+    const signInData = yield axiosInstance
+      .post('/users/signin', {
+        ...formState.userData,
+      })
+      .then(res => res.data);
+
+    yield put({
+      type: actions.signInSuccess.type,
+      payload: {
+        userData: signInData,
+      },
+    });
+  } catch (error) {
+    yield put({
+      type: actions.signInFailure.type,
+      payload: {
+        error,
+      },
+    });
+  }
+}
+
+function* signOutWorkSaga() {
+  try {
+    const formState = yield select(selectForm);
+    yield axiosInstance.post("/users/signout",{
+      ...formState.userData
+    })
+    yield put({
+      type:actions.signOutSuccess.type
+    })
+  } catch (error) {
+    yield put({
+      type:actions.signOutFailure.type,
+      payload:{
+        error
+      }
+    })
+  }
+}
 
 export function* formSaga() {
-  if (type == 'signup') {
-    yield takeLatest(actions.signUpStart.type, signUpWorkSaga);
-  } else if (type == 'signin') {
-    yield takeLatest(actions.signInStart.type, signInWorkSaga);
-  }
+  yield takeLatest(actions.signInStart.type, signInWorkSaga);
+  yield takeLatest(actions.signOutStart.type, signOutWorkSaga);
 }

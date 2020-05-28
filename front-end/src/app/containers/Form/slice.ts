@@ -4,34 +4,52 @@ import { ContainerState } from './types';
 
 // The initial state of the Form container
 export const initialState: ContainerState = {
-  email: '',
-  password: '',
+  // best is to use auth token to perform user data,
+  // but now we hang in there
+  userData: {
+    email: '',
+    password: '',
+  },
   loading: true,
   error: null,
-  formType: 'signup',
+  isSignedIn: false,
 };
 
 const formSlice = createSlice({
   name: 'form',
   initialState,
   reducers: {
-    submitForm(state, action: PayloadAction<any>) {
-      state.email = action.payload.email;
-      state.password = action.payload.password;
-      state.formType = action.payload.formType;
-      if (action.payload.formType == 'signup') {
-        state.name = action.payload.name;
-      }
-    },
-    signUpStart(state) {
+    // sign in
+    signInStart(state, action: PayloadAction<any>) {
       state.loading = true;
       state.error = null;
+      state.userData = action.payload.userData;
+    },
+    signInSuccess(state, action: PayloadAction<any>) {
+      state.loading = false;
+      state.error = null;
+      state.userData = action.payload.userData;
+      state.isSignedIn = true;
     },
 
-    // signUpSuccess(state,action:Pa)
-    signInStart(state) {
-      state.loading = true;
-      state.error = null;
+    signInFailure(state, action: PayloadAction<any>) {
+      state.loading = false;
+      state.error = action.payload.error;
+      state.userData = {
+        email: '',
+        password: '',
+      };
+    },
+    signOutStart() {},
+    signOutSuccess(state) {
+      state.isSignedIn = false;
+      state.userData = {
+        email: '',
+        password: '',
+      };
+    },
+    signOutFailure(state, action: PayloadAction<any>) {
+      state.error = action.payload.error;
     },
   },
 });

@@ -25,8 +25,6 @@ export const Header = memo((props: Props) => {
   const header = useSelector(selectHeader);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const dispatch = useDispatch();
-  
-  
 
   return (
     <>
@@ -35,7 +33,7 @@ export const Header = memo((props: Props) => {
         <meta name="description" content="Description of Header" />
       </Helmet>
       <Container>
-        <div>user info</div>
+        <Link to={'/'}>Home</Link>
         <div className="header-info">
           <Link to={'/signin'}>Sign In</Link>
           <Link to={'/signup'}>Sign Up</Link>
@@ -51,13 +49,13 @@ const Container = styled.header`
   justify-content: space-between;
   height: 7rem;
   align-items: center;
+  a {
+    margin-left: 2rem;
+    text-decoration: none;
+    color: black;
+    font-size: 2rem;
+  }
   .header-info {
     margin-right: 2rem;
-    & > * {
-      margin-left: 2rem;
-      text-decoration: none;
-      color: black;
-      font-size: 2rem;
-    }
   }
 `;

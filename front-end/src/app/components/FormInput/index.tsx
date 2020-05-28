@@ -23,12 +23,30 @@ export const FormInput = memo((props: Props) => {
 
 const Input = styled.div`
   display: flex;
+  margin-top: 2rem;
   flex-direction: column;
   width: 100%;
   & > input {
-    flex-basis: 100%;    
+    flex-basis: 100%;
     text-decoration: none;
+    outline: none;
+    background-color: #14181c;
+    border: none;
+    border-bottom: white 1px solid;
+    color: white;
+    margin-top: 2rem;
+    & :focus {
+      border-bottom-width: 3px;
+    }
+  }
+
+  @media screen and (max-width: 600px) {
+    font-size: 4rem;
+  }
+  @media screen and (min-width: 620px) {
+    font-size: 2.5rem;
+    & > input {
+      font-size: 2rem;
+    }
   }
 `;
-
-

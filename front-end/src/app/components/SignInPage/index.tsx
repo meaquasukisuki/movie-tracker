@@ -18,7 +18,7 @@ export const SignInPage = memo((props: Props) => {
         <Link to="/signup">Sign up!</Link>
       </p>
       <div className="form-container">
-        <Form type="signin" />
+        <Form/>
       </div>
     </Div>
   );
