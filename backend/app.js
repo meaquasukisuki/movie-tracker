@@ -14,7 +14,7 @@ const bodyParser = require("body-parser");
 const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/users");
 const moviesRouter = require("./routes/movies");
-
+const commentRouter = require("./routes/comments");
 //
 
 dotenv.config();
@@ -53,6 +53,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/", indexRouter);
 app.use("/api/users", usersRouter);
 app.use("/api/movies", moviesRouter);
+app.use("/api/comments", commentRouter);
 
 app.use(bodyParser.json());
 app.use(

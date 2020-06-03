@@ -10,8 +10,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components/macro';
 
 import { useInjectReducer, useInjectSaga } from 'utils/redux-injectors';
-import { reducer, sliceKey } from './slice';
-import { selectHeader } from './selectors';
+import { reducer, sliceKey } from '../Form/slice';
+import { selectForm } from '../Form/selectors';
 import { headerSaga } from './saga';
 import { Link } from 'react-router-dom';
 
@@ -22,9 +22,10 @@ export const Header = memo((props: Props) => {
   useInjectSaga({ key: sliceKey, saga: headerSaga });
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const header = useSelector(selectHeader);
+  const fromState = useSelector(selectForm);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const dispatch = useDispatch();
+  const token = localStorage.getItem('token');
 
   return (
     <>
@@ -35,7 +36,12 @@ export const Header = memo((props: Props) => {
       <Container>
         <Link to={'/'}>Home</Link>
         <div className="header-info">
-          <Link to={'/signin'}>Sign In</Link>
+          {(token || '').length > 2 ? (
+            <Link to={'/signout'}>Sign out</Link>
+          ) : (
+            <Link to={'/signin'}>Sign In</Link>
+          )}
+          {/* <Link to={'/signin'}>Sign In</Link> */}
           <Link to={'/signup'}>Sign Up</Link>
         </div>
       </Container>

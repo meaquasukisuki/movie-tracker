@@ -8,9 +8,14 @@ import styled from 'styled-components/macro';
 import { Link } from 'react-router-dom';
 import { Form } from 'app/containers/Form/Loadable';
 
-interface Props {}
+interface Props {
+  history: any;
+  location: any;
+  match: any;
+}
 
 export const SignInPage = memo((props: Props) => {
+  const { history, location, match } = props;
   return (
     <Div>
       <p className="info">
@@ -18,7 +23,7 @@ export const SignInPage = memo((props: Props) => {
         <Link to="/signup">Sign up!</Link>
       </p>
       <div className="form-container">
-        <Form/>
+        <Form history={history} />
       </div>
     </Div>
   );

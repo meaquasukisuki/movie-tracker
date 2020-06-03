@@ -6,9 +6,13 @@ import { ContainerState } from './types';
 export const initialState: ContainerState = {
   // best is to use auth token to perform user data,
   // but now we hang in there
-  userData: {
+  userState: {
     email: '',
     password: '',
+  },
+  userData: {
+    user: {},
+    token: '',
   },
   loading: true,
   error: null,
@@ -23,19 +27,24 @@ const formSlice = createSlice({
     signInStart(state, action: PayloadAction<any>) {
       state.loading = true;
       state.error = null;
-      state.userData = action.payload.userData;
+      state.userState = action.payload.userState;
     },
     signInSuccess(state, action: PayloadAction<any>) {
       state.loading = false;
       state.error = null;
       state.userData = action.payload.userData;
-      state.isSignedIn = true;
+      state.userState.name = state.userData.user.name;
+
+      localStorage.setItem('token', state.userData.token || '');
+      if ((localStorage.getItem('token') || '').length > 0) {
+        state.isSignedIn = true;
+      }
     },
 
     signInFailure(state, action: PayloadAction<any>) {
       state.loading = false;
       state.error = action.payload.error;
-      state.userData = {
+      state.userState = {
         email: '',
         password: '',
       };
@@ -43,10 +52,15 @@ const formSlice = createSlice({
     signOutStart() {},
     signOutSuccess(state) {
       state.isSignedIn = false;
-      state.userData = {
+      state.userState = {
         email: '',
         password: '',
       };
+      state.userData = {
+        token: '',
+        user: {},
+      };
+      localStorage.setItem('token', '');
     },
     signOutFailure(state, action: PayloadAction<any>) {
       state.error = action.payload.error;

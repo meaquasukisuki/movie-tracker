@@ -20,8 +20,8 @@ export function Comment(props: Props) {
   return (
     <Div>
       <div className="userInfo">
-        <span>{name}</span>
-        <span>{email}</span>
+        <span>name:{name}</span>
+        <span>email:{email}</span>
       </div>
       <div className="content">{text}</div>
     </Div>
@@ -30,11 +30,18 @@ export function Comment(props: Props) {
 
 const Div = styled.div`
   border-bottom: 2px black solid;
+  width: 100%;
   color: black;
-  background-color: whitesmoke;
-  span {
-    margin: 2rem;
+  background-color: #f5e8cb;
+  display: flex;
+  flex-direction: column;
+  .userInfo {
+    display: flex;
+    flex-direction: column;
   }
+  /* span {
+    margin: 2rem;
+  } */
   @media screen and (max-width: 720px) {
     width: 100%;
   }

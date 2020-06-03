@@ -6,14 +6,13 @@ const User = require("../models/userModel");
 
 //get All user
 
-router.get("/", function (req, res) {
-  userModel.find({}, function (err, users) {
-    if (err) {
-      res.status(500).send(err.message);
-    } else {
-      res.status(200).send(users);
-    }
-  });
+router.get("/", async function (req, res) {
+  try {
+    const users = await User.find({});
+    res.status(200).send(users);
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
 });
 
 //get(find) one user
@@ -50,6 +49,8 @@ router.post("/signin", async (req, res) => {
     res.status(500).send(error.message);
   }
 });
+
+
 
 router.post("/signout", async (req, res) => {
   try {

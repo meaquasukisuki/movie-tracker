@@ -6,7 +6,7 @@
 
 import React, { memo, useState, FormEvent } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components/macro';
 
 import { useInjectReducer, useInjectSaga } from 'utils/redux-injectors';
@@ -14,27 +14,32 @@ import { reducer, sliceKey, actions } from './slice';
 
 import { formSaga } from './saga';
 import { FormInput } from 'app/components/FormInput';
+import { selectForm } from './selectors';
 
-export const Form = memo(props => {
+interface Props {
+  history?: any;
+}
+
+export const Form = memo((props: Props) => {
   useInjectReducer({ key: sliceKey, reducer: reducer });
   useInjectSaga({ key: sliceKey, saga: formSaga });
-
+  const FormState = useSelector(selectForm);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  // const formSelect = useSelector(selectForm);
+
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const dispatch = useDispatch();
   const [userInfoState, setUserInfoState] = useState({
     email: '',
     password: '',
   });
-
+  const { history } = props;
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
     dispatch({
       type: actions.signInStart.type,
-      payload:{
-        userData:userInfoState
-      }
+      payload: {
+        userState: userInfoState,
+      },
     });
   };
 

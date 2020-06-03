@@ -1,6 +1,10 @@
 /* --- STATE --- */
 export interface FormState {
   userData: {
+    user: any;
+    token?: string;
+  };
+  userState: {
     email: string;
     password: string;
     name?: string;

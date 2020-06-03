@@ -14,8 +14,13 @@ import { reducer, sliceKey, actions } from './slice';
 
 import { signUpFormSaga } from './saga';
 import { FormInput } from 'app/components/FormInput';
+import { Redirect, RouteComponentProps } from 'react-router-dom';
 
-export const SignUpForm = memo(props => {
+interface Props {
+  history?: any;
+}
+
+export const SignUpForm = memo((props: Props) => {
   useInjectReducer({ key: sliceKey, reducer: reducer });
   useInjectSaga({ key: sliceKey, saga: signUpFormSaga });
 
@@ -43,6 +48,7 @@ export const SignUpForm = memo(props => {
         },
       },
     });
+    props.history.push('/signin');
   };
 
   const onEmailChange = e => {

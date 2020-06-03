@@ -18,6 +18,7 @@ import { DetailedPage } from './components/DetailedPage/Loadable';
 import { SignInPage } from './components/SignInPage/Loadable';
 import { SignUpPage } from './components/SignUpPage/Loadable';
 import { Header } from './containers/Header';
+import { SignoutPage } from './components/SignoutPage/Loadable';
 
 export function App() {
   return (
@@ -35,6 +36,7 @@ export function App() {
           <Route path="/movies/:id" component={DetailedPage} />
           <Route path="/signin" component={SignInPage} />
           <Route path="/signup" component={SignUpPage} />
+          <Route path="/signout" component={SignoutPage} />
           <Route component={NotFoundPage} />
         </Switch>
         <GlobalStyle />

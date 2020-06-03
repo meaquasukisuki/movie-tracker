@@ -6,14 +6,15 @@ import axiosInstance from 'app/axios/axios.config';
 
 function* signInWorkSaga() {
   const formState = yield select(selectForm);
-  console.log(formState);
 
   try {
     const signInData = yield axiosInstance
       .post('/users/signin', {
-        ...formState.userData,
+        ...formState.userState,
       })
-      .then(res => res.data);
+      .then(res => {
+        return res.data;
+      });
 
     yield put({
       type: actions.signInSuccess.type,
@@ -21,6 +22,8 @@ function* signInWorkSaga() {
         userData: signInData,
       },
     });
+    
+    // console.log(formState);
   } catch (error) {
     yield put({
       type: actions.signInFailure.type,
@@ -34,19 +37,19 @@ function* signInWorkSaga() {
 function* signOutWorkSaga() {
   try {
     const formState = yield select(selectForm);
-    yield axiosInstance.post("/users/signout",{
-      ...formState.userData
-    })
+    yield axiosInstance.post('/users/signout', {
+      ...formState.userState,
+    });
     yield put({
-      type:actions.signOutSuccess.type
-    })
+      type: actions.signOutSuccess.type,
+    });
   } catch (error) {
     yield put({
-      type:actions.signOutFailure.type,
-      payload:{
-        error
-      }
-    })
+      type: actions.signOutFailure.type,
+      payload: {
+        error,
+      },
+    });
   }
 }
 

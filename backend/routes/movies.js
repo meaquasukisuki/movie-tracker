@@ -60,13 +60,17 @@ router.post("/:id", async (req, res) => {
       date: new Date().toString(),
       movie_id: req.params.id,
     };
-    await Comments.create(commentData);
-
-    res.send(commentData);
+    await Comments.create(commentData);    
+    movie.num_mflix_comments += 1;
+    
+    await movie.save();
+    res.send("post success!!");
   } catch (e) {
     res.send(e.message);
   }
 });
+
+
 
 // router.put("/:id", isAuth, isAdmin, async (req, res) => {
 //   const productId = req.params.id;
